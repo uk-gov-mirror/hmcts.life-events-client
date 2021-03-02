@@ -12,4 +12,5 @@ java -jar /tmp/openapi-generator-cli.jar generate \
 --artifact-id life-events-client \
 --artifact-version 0.0.1-SNAPSHOT \
 -g spring -p java8=true --library spring-cloud \
--o .
+-o . \
+--skip-validate-spec
