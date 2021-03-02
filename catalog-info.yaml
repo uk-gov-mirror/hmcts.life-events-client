@@ -1,0 +1,14 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: life-events-client
+  description: Client for HMPO Life Events service
+  annotations:
+    github.com/project-slug: 'hmcts/life-events-client'
+  tags:
+    - library
+    - life-events-client
+spec:
+  type: library
+  lifecycle: experimental
+  owner: hmcts
