@@ -27,10 +27,12 @@ dependencies {
     testCompile 'org.springframework.boot:spring-boot-starter-test:2.0.5.RELEASE'
 }
 
+def buildNumber = System.getenv("RELEASE_VERSION")?.replace("refs/tags/", "") ?: "DEV-SNAPSHOT"
+
 group = 'uk.gov.hmcts.reform'
-version = '0.0.1-SNAPSHOT'
+version buildNumber
 description = 'Client for HMPO Life Events service'
-sourceCompatibility = '1.8'
+sourceCompatibility = 11
 
 def gitRepo = "https://github.com/hmcts/life-events-client"
 
