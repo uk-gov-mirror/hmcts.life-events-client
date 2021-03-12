@@ -21,6 +21,16 @@ jobs:
           java-version: 11
       - name: Build
         run: ./gradlew check
+      - name: Integration test
+        env:
+          ACCESS_TOKEN_URI: ${{ secrets.ACCESS_TOKEN_URI }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          PUBLIC_CERTIFICATE: ${{ secrets.PUBLIC_CERTIFICATE }}
+        run: ./gradlew integration
       - name: Release
         env:
           BINTRAY_USER: jenkins-reform-hmcts

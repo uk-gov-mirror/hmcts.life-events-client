@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
  * The groom (or first partner)
  */
 @ApiModel(description = "The groom (or first partner)")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2021-03-02T13:36:51.963195Z[Europe/London]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2021-03-10T16:10:49.642712Z[Europe/London]")
 
 public class Groom   {
   @JsonProperty("forenames")

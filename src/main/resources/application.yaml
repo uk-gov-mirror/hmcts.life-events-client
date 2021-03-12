@@ -1,0 +1,11 @@
+ssl:
+  publicCertificate: ${PUBLIC_CERTIFICATE}
+  privateKey: ${PRIVATE_KEY}
+bearertoken:
+  accessTokenUri: ${ACCESS_TOKEN_URI}
+  clientId: ${CLIENT_ID}
+  clientSecret: ${CLIENT_SECRET}
+  username: ${USERNAME}
+  password: ${PASSWORD}
+
+
