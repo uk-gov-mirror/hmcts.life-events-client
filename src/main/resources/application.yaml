@@ -7,5 +7,7 @@ bearertoken:
   clientSecret: ${CLIENT_SECRET}
   username: ${USERNAME}
   password: ${PASSWORD}
+death:
+  url: ${DEATH_URL:https://api.uat.notprod.lev.homeoffice.gov.uk}
 
 

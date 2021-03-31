@@ -1,5 +1,6 @@
 package uk.gov.hmcts.lifeevents.client.api;
 
+import uk.gov.hmcts.lifeevents.client.config.ClientConfiguration;
 import uk.gov.hmcts.lifeevents.client.model.V1Death;
 
 import java.time.LocalDate;
@@ -7,13 +8,10 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import uk.gov.hmcts.lifeevents.client.config.ClientConfiguration;
-import uk.gov.hmcts.lifeevents.client.config.SSLConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,14 +19,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = { ClientConfiguration.class, SSLConfiguration.class }, properties = {
+@SpringBootTest(classes = { ClientConfiguration.class }, properties = {
         "death.url=https://api.uat.notprod.lev.homeoffice.gov.uk"
 })
 @ActiveProfiles("test")
 @EnableConfigurationProperties
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration()
-@EnableFeignClients(clients = DeathApiClient.class)
 @EnableAutoConfiguration
 class DeathApiClientTest {
 
