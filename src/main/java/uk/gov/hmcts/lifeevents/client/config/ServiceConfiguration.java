@@ -5,6 +5,8 @@ import uk.gov.hmcts.lifeevents.client.service.DeathService;
 import uk.gov.hmcts.lifeevents.client.service.DeathServiceImpl;
 import uk.gov.hmcts.lifeevents.client.service.NoOpDeathServiceImpl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -17,6 +19,8 @@ import org.springframework.context.annotation.Configuration;
 @EnableFeignClients(clients = DeathApiClient.class)
 public class ServiceConfiguration {
 
+  private static final Logger logger = LoggerFactory.getLogger(ServiceConfiguration.class);
+
   private DeathApiClient deathApiClient;
 
   public ServiceConfiguration(final DeathApiClient deathApiClient) {
@@ -24,13 +28,13 @@ public class ServiceConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(name = "bearertoken.publicCertificate")
+  @ConditionalOnProperty(name = "ssl.publicCertificate")
   public DeathService deathService() {
     return new DeathServiceImpl(deathApiClient);
   }
 
   @Bean
-  @ConditionalOnMissingBean(value = DeathServiceImpl.class)
+  @ConditionalOnMissingBean(value = DeathService.class)
   public DeathService noOpDeathService() {
     return new NoOpDeathServiceImpl();
   }

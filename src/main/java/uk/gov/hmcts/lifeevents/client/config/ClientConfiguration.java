@@ -26,6 +26,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -38,6 +40,8 @@ import org.springframework.security.oauth2.client.token.grant.password.ResourceO
 @EnableConfigurationProperties
 public class ClientConfiguration {
 
+  private static final Logger logger = LoggerFactory.getLogger(ClientConfiguration.class);
+
   @Bean
   @ConditionalOnProperty(name = "bearertoken.clientId")
   public ResourceOwnerPasswordResourceDetails bearerTokenResourceDetails(
@@ -48,6 +52,7 @@ public class ClientConfiguration {
           @Value("${bearertoken.password}") String password
 
   ) {
+    logger.info("bearerTokenResourceDetails()");
     ResourceOwnerPasswordResourceDetails details = new ResourceOwnerPasswordResourceDetails();
     details.setAccessTokenUri(accessTokenUri);
     details.setClientId(clientId);
@@ -60,6 +65,7 @@ public class ClientConfiguration {
   @Bean
   @ConditionalOnBean(value=ResourceOwnerPasswordResourceDetails.class)
   public OAuth2FeignRequestInterceptor bearerTokenRequestInterceptor(ResourceOwnerPasswordResourceDetails bearerTokenResourceDetails) {
+    logger.info("bearerTokenRequestInterceptor()");
     return new OAuth2FeignRequestInterceptor(new DefaultOAuth2ClientContext(), bearerTokenResourceDetails);
   }
 
@@ -72,8 +78,10 @@ public class ClientConfiguration {
           throws NoSuchAlgorithmException, KeyStoreException,
           CertificateException, IOException, KeyManagementException, UnrecoverableKeyException {
     if(publicCertificate == null || publicCertificate.isEmpty()){
+      logger.info("levClientNoOp()");
       return new Client.Default(null, null);
     } else {
+      logger.info("levClient()");
       return new Client.Default(getClientSSLSocketFactory(publicCertificate, privateKey), null);
     }
   }
