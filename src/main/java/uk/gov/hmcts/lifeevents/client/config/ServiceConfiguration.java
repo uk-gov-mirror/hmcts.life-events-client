@@ -2,7 +2,11 @@ package uk.gov.hmcts.lifeevents.client.config;
 
 import uk.gov.hmcts.lifeevents.client.api.DeathApiClient;
 import uk.gov.hmcts.lifeevents.client.service.DeathService;
+import uk.gov.hmcts.lifeevents.client.service.DeathServiceImpl;
+import uk.gov.hmcts.lifeevents.client.service.NoOpDeathServiceImpl;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +24,14 @@ public class ServiceConfiguration {
   }
 
   @Bean
+  @ConditionalOnProperty(name = "bearertoken.publicCertificate")
   public DeathService deathService() {
-    return new DeathService(deathApiClient);
+    return new DeathServiceImpl(deathApiClient);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean(value = DeathServiceImpl.class)
+  public DeathService noOpDeathService() {
+    return new NoOpDeathServiceImpl();
   }
 }

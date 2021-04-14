@@ -26,8 +26,9 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.security.oauth2.client.feign.OAuth2FeignRequestInterceptor;
 import org.springframework.context.annotation.Bean;
@@ -37,22 +38,16 @@ import org.springframework.security.oauth2.client.token.grant.password.ResourceO
 @EnableConfigurationProperties
 public class ClientConfiguration {
 
-  @Autowired
-  ResourceOwnerPasswordResourceDetails resourceOwnerPasswordResourceDetails;
-
   @Bean
-  public OAuth2FeignRequestInterceptor bearerTokenRequestInterceptor() {
-    return new OAuth2FeignRequestInterceptor(new DefaultOAuth2ClientContext(), resourceOwnerPasswordResourceDetails);
-  }
-
-  @Bean
+  @ConditionalOnProperty(name = "bearertoken.clientId")
   public ResourceOwnerPasswordResourceDetails bearerTokenResourceDetails(
-          @Value("${bearertoken.accessTokenUri}") String accessTokenUri,
+          @Value("${bearertoken.accessTokenUri:https://sso.digital.homeoffice.gov.uk/auth/realms/lev/protocol/openid-connect/token}") String accessTokenUri,
           @Value("${bearertoken.clientId}") String clientId,
           @Value("${bearertoken.clientSecret}") String clientSecret,
           @Value("${bearertoken.username}") String userName,
           @Value("${bearertoken.password}") String password
-          ) {
+
+  ) {
     ResourceOwnerPasswordResourceDetails details = new ResourceOwnerPasswordResourceDetails();
     details.setAccessTokenUri(accessTokenUri);
     details.setClientId(clientId);
@@ -63,14 +58,24 @@ public class ClientConfiguration {
   }
 
   @Bean
+  @ConditionalOnBean(value=ResourceOwnerPasswordResourceDetails.class)
+  public OAuth2FeignRequestInterceptor bearerTokenRequestInterceptor(ResourceOwnerPasswordResourceDetails bearerTokenResourceDetails) {
+    return new OAuth2FeignRequestInterceptor(new DefaultOAuth2ClientContext(), bearerTokenResourceDetails);
+  }
+
+  @Bean
+  @ConditionalOnProperty(name = "ssl.publicCertificate")
   public Client levClient(
           @Value("${ssl.publicCertificate}") String publicCertificate,
           @Value("${ssl.privateKey}") String privateKey
   )
           throws NoSuchAlgorithmException, KeyStoreException,
           CertificateException, IOException, KeyManagementException, UnrecoverableKeyException {
-
-    return new Client.Default(getClientSSLSocketFactory(publicCertificate, privateKey), null);
+    if(publicCertificate == null || publicCertificate.isEmpty()){
+      return new Client.Default(null, null);
+    } else {
+      return new Client.Default(getClientSSLSocketFactory(publicCertificate, privateKey), null);
+    }
   }
 
   private SSLSocketFactory getClientSSLSocketFactory(String publicCertificate, String privateKey)
