@@ -9,6 +9,6 @@ lev:
     username: ${LEV_USERNAME:}
     password: ${LEV_PASSWORD:}
   death:
-    url: ${LEV_DEATH_URL:https://api.uat.notprod.lev.homeoffice.gov.uk}
+    url: ${LEV_DEATH_URL:}
 
 
