@@ -28,7 +28,7 @@ public class ServiceConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(name = "ssl.publicCertificate")
+  @ConditionalOnProperty(name = "lev.ssl.publicCertificate")
   public DeathService deathService() {
     return new DeathServiceImpl(deathApiClient);
   }

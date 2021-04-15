@@ -43,13 +43,13 @@ public class ClientConfiguration {
   private static final Logger logger = LoggerFactory.getLogger(ClientConfiguration.class);
 
   @Bean
-  @ConditionalOnProperty(name = "bearertoken.clientId")
+  @ConditionalOnProperty(name = "lev.bearertoken.clientId")
   public ResourceOwnerPasswordResourceDetails bearerTokenResourceDetails(
-          @Value("${bearertoken.accessTokenUri:https://sso.digital.homeoffice.gov.uk/auth/realms/lev/protocol/openid-connect/token}") String accessTokenUri,
-          @Value("${bearertoken.clientId}") String clientId,
-          @Value("${bearertoken.clientSecret}") String clientSecret,
-          @Value("${bearertoken.username}") String userName,
-          @Value("${bearertoken.password}") String password
+          @Value("${lev.bearertoken.accessTokenUri:https://sso.digital.homeoffice.gov.uk/auth/realms/lev/protocol/openid-connect/token}") String accessTokenUri,
+          @Value("${lev.bearertoken.clientId}") String clientId,
+          @Value("${lev.bearertoken.clientSecret}") String clientSecret,
+          @Value("${lev.bearertoken.username}") String userName,
+          @Value("${lev.bearertoken.password}") String password
 
   ) {
     logger.info("bearerTokenResourceDetails()");
@@ -70,10 +70,10 @@ public class ClientConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(name = "ssl.publicCertificate")
+  @ConditionalOnProperty(name = "lev.ssl.publicCertificate")
   public Client levClient(
-          @Value("${ssl.publicCertificate}") String publicCertificate,
-          @Value("${ssl.privateKey}") String privateKey
+          @Value("${lev.ssl.publicCertificate}") String publicCertificate,
+          @Value("${lev.ssl.privateKey}") String privateKey
   )
           throws NoSuchAlgorithmException, KeyStoreException,
           CertificateException, IOException, KeyManagementException, UnrecoverableKeyException {
